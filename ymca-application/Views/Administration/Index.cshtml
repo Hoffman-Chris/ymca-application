@@ -1,0 +1,22 @@
+﻿
+@{
+    ViewBag.Title = "Administration";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Administration</h2>
+
+<hr />
+
+<div class="row">
+    <div class="col-md-4">
+        <h4>Manage Users</h4>
+        <p>Manage user's account and personal information such as email or access level.</p>
+        <p><a class="btn btn-default" href='@Url.Action("Users", "Administration")'>Click here &raquo;</a></p>
+    </div>
+    <div class="col-md-4">
+        <h4>Manage Programs</h4>
+        <p>Manage available programs.</p>
+        <p><a class="btn btn-default" href='@Url.Action("Programs", "Administration")'>Click here &raquo;</a></p>
+    </div>
+</div>

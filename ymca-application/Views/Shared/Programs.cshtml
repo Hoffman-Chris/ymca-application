@@ -1,0 +1,258 @@
+﻿@using ymca_application.Extensions
+
+@{
+    ViewBag.Title = "Programs";
+    var Role = User.Identity.GetRole();
+}
+
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+
+    <title>Programs</title>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.22/css/jquery.dataTables.min.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/1.6.5/css/buttons.dataTables.min.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/select/1.3.1/css/select.dataTables.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="~/Content/DataTables/Editor-1.9.6/css/editor.dataTables.min.css" />
+</head>
+<body class="dataTables">
+    <div class="container">
+        @if (User.Identity.GetRole() == 5)
+        {
+            <h1>Manage Programs</h1>
+        }
+        else
+        {
+            <h1>Programs</h1>
+        }
+        <br />
+        <table id="Programs" class="display text-nowrap compact" style="width:100%">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Dates</th>
+                    <th>Time</th>
+                    <th>Capacity</th>
+                    <th>Members</th>
+                    <th>Non-members</th>
+                    <th>Instructor</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+</body>
+</html>
+
+@section scripts{
+
+    <script type="text/javascript" charset="utf-8" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script type="text/javascript" charset="utf-8" src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="https://cdn.datatables.net/buttons/1.6.5/js/dataTables.buttons.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="https://cdn.datatables.net/select/1.3.1/js/dataTables.select.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="~/Content/DataTables/Editor-1.9.6/js/dataTables.editor.min.js"></script>
+
+    <script>
+
+        var editor;
+        var defaultLength = 25;
+        var defaultSort = 2;
+        var roleLevel = "@User.Identity.GetRole()";
+        $(document).ready(function () {
+
+            // Function to get today's date
+            function getDate() {
+                today = new Date().getMonth() + 1
+                    + "/" + new Date().getDate()
+                    + "/" + new Date().getFullYear()
+                    + " " + new Date().getHours()
+                    + ":" + new Date().getMinutes()
+                    + ":" + new Date().getSeconds()
+                return today;
+            };
+
+            // Disable autocomplete on form fields
+            $.extend(true, $.fn.dataTable.Editor.Field.defaults, {
+                attr: {
+                    autocomplete: 'off'
+                }
+            });
+
+            // Editor Form
+            var editor = new $.fn.dataTable.Editor({
+                ajax: '/api/GetPrograms',
+                table: '#Programs',
+                fields: [
+                    {
+                        label: "Name:",
+                        name: "Program.ProgramName"
+                    },
+                    {
+                        label: "Description:",
+                        name: "Program.ProgramDescription",
+                        type: 'textarea'
+                    },
+                    {
+                        label: "Start Date:",
+                        name: "data.Program.StartDate",
+                        type: "datetime",
+                        format: "M/DD/YYYY"
+                    },
+                    {
+                        label: "End Date:",
+                        name: "data.Program.EndDate",
+                        type: "datetime",
+                        format: "M/DD/YYYY"
+                    },
+                    {
+                        label: "Start Time:",
+                        name: "Program.StartTime",
+                        id: "programStartTime",
+                        type: 'datetime',
+                        format: 'h:mm A',
+                        fieldInfo: '12 hour clock format',
+                        keyInput: false
+                    },
+                    {
+                        label: "End Time:",
+                        name: "Program.EndTime",
+                        id: "programEndTime",
+                        type: 'datetime',
+                        format: 'h:mm A',
+                        fieldInfo: '12 hour clock format',
+                        keyInput: false
+                    },
+                    {
+                        label: "Capacity:",
+                        name: "Program.ProgramCapacity",
+                        attr: {
+                            type: "number"
+                        }
+                    },
+                    {
+                        label: "Member Price:",
+                        name: "Program.MemberPrice",
+                        attr: {
+                            type: 'number',
+                            step: 'any'
+                        }
+                    },
+                    {
+                        label: "Non-member Price:",
+                        name: "Program.NonMemberPrice",
+                        attr: {
+                            type: 'number',
+                            step: 'any'
+                        }
+                    },
+                    {
+                        label: "Instructor:",
+                        name: "Program.InstructorId",
+                        type: 'select',
+                        placeholder: "Select an instructor"
+                    }
+                ]
+            });
+
+            //// Round hours to whole hours
+            //editor.on('opened', function () {
+            //    editor.field('Program.StartTime').input().on('change', function () {
+
+            //        var time = editor.field('Program.StartTime').val();
+            //        var searchValue = time.substr(time.indexOf(':') + 1, 2);
+            //        time = time.replace(searchValue, "00");
+            //        editor.field('Program.StartTime').val(time);
+            //    });
+            //});
+
+            // Clear button : start time
+            $('<i id="clearStartTime" class="fa fa-close" style="position:absolute;top: 23%;right: 18%;"></i>').insertBefore(
+                editor.field('Program.StartTime').input()
+            );
+
+            // Clear button : end time
+            $('<i id="clearEndTime" class="fa fa-close" style="position:absolute;top: 23%;right: 18%;"></i>').insertAfter(
+                editor.field('Program.EndTime').input()
+            );
+
+            // Clear start time
+            $(document).on('click', '#clearStartTime', function () {
+                editor.field('Program.StartTime').val('');
+            });
+
+            // Clear end time
+            $(document).on('click', '#clearEndTime', function () {
+                editor.field('Program.EndTime').val('');
+            });
+
+            // DataTables table
+            var table = $('#Programs').DataTable({
+                autoWidth: false,
+                select: true,
+                // Default table lengths
+                lengthMenu: [[defaultLength, 50, 100, -1], [defaultLength, 50, 100, "All"]],
+                // Table data source
+                ajax: {
+                    url: '/api/GetPrograms'
+                },
+                // Table columns
+                columns: [
+                    { data: "Program.ProgramName" },
+                    { data: "Program.ProgramDescription" },
+                    {
+                        data: null, render: function (data, type, row) {
+                            if (data.Program.StartDate === null || data.Program.EndDate === null ) return "-";
+                            return data.Program.StartDate + ' - ' + data.Program.EndDate;
+                        }
+                    },
+                    {
+                        data: null, render: function (data, type, row) {
+                            if (data.Program.StartTime === null || data.Program.EndTime === null ) return "-";
+                            return data.Program.StartTime + ' - ' + data.Program.EndTime;
+                        }
+                    },
+                    { data: "Program.MemberPrice", render: $.fn.dataTable.render.number(',', '.', 2, '$') },
+                    { data: "Program.NonMemberPrice", render: $.fn.dataTable.render.number(',', '.', 2, '$') },
+                    { data: "Program.MaxParticipants" },
+                    {
+                        data: null, render: function (data, type, row) {
+                            if (data.Instructor.InstructorFirstName === null || data.Instructor.InstructorLastName === null ) return "-";
+                            return data.Instructor.InstructorFirstName + ' ' + data.Instructor.InstructorLastName;
+                        }
+                    }
+                ],
+                // Control button layout
+                dom: '<"floatRight"B><"clear">lfrtip',
+                // Default table order
+                order: [[defaultSort, "asc"]],
+                buttons: [
+                    { extend: "create", editor: editor, attr: { id: 'newButton' } },
+                    { extend: "edit", editor: editor, attr: { id: 'editButton' } },
+                    { extend: "remove", editor: editor, attr: { id: 'deleteButton' } },
+                    {
+                        // Show default view filter button
+                        text: 'Show Default View', action: function (e, dt, node, config) {
+                            table.search('')
+                                .columns().search('')
+                                .columns().order('')
+                                .page.len(defaultLength)
+                                .column(defaultSort).order('asc').draw();
+                        }
+                    }
+                ]
+            });
+
+            // Hide CRUD buttons from certain users
+            if (!(roleLevel >= 3)) {
+                $('#editButton').hide();
+            }
+
+            if (!(roleLevel >= 4)) {
+                $('#newButton').hide();
+                $('#deleteButton').hide();
+
+            }
+        });</script>
+}
