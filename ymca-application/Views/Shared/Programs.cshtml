@@ -213,9 +213,9 @@
                             return data.Program.StartTime + ' - ' + data.Program.EndTime;
                         }
                     },
-                    { data: "Program.MemberPrice", render: $.fn.dataTable.render.number(',', '.', 2, '$') },
-                    { data: "Program.NonMemberPrice", render: $.fn.dataTable.render.number(',', '.', 2, '$') },
                     { data: "Program.MaxParticipants" },
+                    { data: "Program.NonMemberPrice", render: $.fn.dataTable.render.number(',', '.', 2, '$') },
+                    { data: "Program.MemberPrice", render: $.fn.dataTable.render.number(',', '.', 2, '$') },
                     {
                         data: null, render: function (data, type, row) {
                             if (data.Instructor.InstructorFirstName === null || data.Instructor.InstructorLastName === null ) return "-";
