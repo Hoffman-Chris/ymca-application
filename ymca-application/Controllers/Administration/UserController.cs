@@ -35,6 +35,11 @@ namespace ymca_application.Controllers
                     )
                     .Field(new Field("AspNetUsers.Zip")
                     )
+                    .Field(new Field("AspNetUsers.Active")
+                    )
+                    .Field(new Field("AspNetUsers.LockoutEndDateUtc")
+                    .SetFormatter(Format.IfEmpty(null))
+                    )
                     .Field(new Field("AspNetUsers.JoinDate")
                     )
                     .Field(new Field("AspNetUsers.Role")
@@ -51,6 +56,23 @@ namespace ymca_application.Controllers
                     )
                     .LeftJoin("AspNetRoles", "AspNetUsers.Role", "=", "AspNetRoles.Id"
                     )
+                    .Process(request)
+                    .Data();
+
+                return Json(response);
+            }
+        }
+
+        [Route("api/DisableUser")]
+        [HttpPost]
+        public IHttpActionResult DisableUser()
+        {
+            var request = HttpContext.Current.Request;
+
+            using (var db1 = new Database("sqlserver", ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString))
+            {
+                var response = new Editor(db1, "AspNetUsers", "Id")
+                    .Field(new Field("AspNetUsers.LockoutEndDateUtc"))
                     .Process(request)
                     .Data();
 

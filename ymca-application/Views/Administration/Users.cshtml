@@ -1,4 +1,11 @@
-﻿<html>
+﻿@using ymca_application.Extensions
+
+@{
+    ViewBag.Title = "Users";
+    var Role = User.Identity.GetRole();
+}
+
+<html>
 <head>
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
 
@@ -95,17 +102,47 @@
                         name: "AspNetUsers.Role",
                         type: "select",
                         placeholder: "Select a role"
+                    },
+                    {
+                        label: "Active:",
+                        name: "AspNetUsers.Active",
+                        type: "checkbox",
+                        options: [
+                            { label: "", "value": "True" }
+                        ],
+                        separator: "|",
+                        unselectedValue: "False"
+                    },
+                    {
+                        name: "AspNetUsers.LockoutEndDateUtc",
+                        type: "hidden"
                     }
                 ]
             });
 
-            // Disable date field from being edited
+            // Disable date field from being edited.
             editor.field('AspNetUsers.JoinDate').disable();
+
+            // Defailt active to true on create event.
+            editor.on('initCreate', function () {
+                editor.field('AspNetUsers.Active').val("True")
+            });
+
+            // If the Active is active on form submission set the date to null; else, set the date to the end of time.
+            editor.on('initSubmit', function () {
+                if (editor.field('AspNetUsers.Active').val() === "True") {
+                    editor.field('AspNetUsers.LockoutEndDateUtc').set(null);
+                } else {
+                    editor.field('AspNetUsers.LockoutEndDateUtc').set('9999-12-31');
+                }
+            });
 
             // DataTables table
             var table = $('#Users').DataTable({
                 autoWidth: false,
-                select: true,
+                select: {
+                    style: 'single'
+                },
                 // Default table lengths
                 lengthMenu: [[defaultLength, 50, 100, -1], [defaultLength, 50, 100, "All"]],
                 // Table data source
@@ -124,9 +161,8 @@
                 // Default table order
                 order: [[0, "asc"]],
                 buttons: [
-                    { extend: "create", editor: editor, attr: { id: 'newButton' } },
-                    { extend: "edit", editor: editor, attr: { id: 'editButton' } },
-                    { extend: "remove", editor: editor, attr: { id: 'deleteButton' } },
+                    { extend: "create", editor: editor, formTitle: 'Create new user', attr: { id: 'newButton' } },
+                    { extend: "edit", editor: editor, formTitle: 'Edit existing user', attr: { id: 'editButton' } },
                     {
                         // Show default view filter button
                         text: 'Show Default View', action: function (e, dt, node, config) {
@@ -139,5 +175,12 @@
                     }
                 ]
             });
+
+            // Disable buttons unless row is selected.
+            table.on('select deselect', function () {
+                var selectedRows = table.rows({ selected: true }).count();
+                table.button(1).enable(selectedRows === 1);
+            });
+
         });</script>
 }
