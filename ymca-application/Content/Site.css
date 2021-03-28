@@ -28,10 +28,6 @@ textarea {
     width: 70px;
 }
 
-/*div.editor-datetime-minutes {
-    display: none;
-}*/
-
 div.DTED_Lightbox_Wrapper div.DTED_Lightbox_Container div.DTED_Lightbox_Content_Wrapper div.DTED_Lightbox_Content div.DTE div.DTE_Body_Content {
     max-height: 75vh !important;
 }

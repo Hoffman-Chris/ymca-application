@@ -21,14 +21,13 @@
                     <span class="icon-bar"></span>
                 </button>
                 <a href='@Url.Action("Index", "Home")'> <img class="navbar-brand" src='@Url.Content("~/Content/Images/ymca-logo.png")' /></a>
-                @*@Html.ActionLink("YMCA", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })*@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     <li>@Html.ActionLink("About", "About", "Home")</li>
                     <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
                     <li>@Html.ActionLink("Programs", "Programs", "Home")</li>
-                    @if (User.Identity.GetRole() == 5)
+                    @if (User.Identity.GetRole() >= 4)
                     {
                         <li id="usersLink">@Html.ActionLink("Administration", "Index", "Administration")</li>
                     }

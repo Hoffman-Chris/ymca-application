@@ -62,15 +62,11 @@
         var roleLevel = "@User.Identity.GetRole()";
         $(document).ready(function () {
 
-            // Function to get today's date
-            function getDate() {
-                today = new Date().getMonth() + 1
-                    + "/" + new Date().getDate()
-                    + "/" + new Date().getFullYear()
-                    + " " + new Date().getHours()
-                    + ":" + new Date().getMinutes()
-                    + ":" + new Date().getSeconds()
-                return today;
+            // Function to get min date for programs.
+            function getMinDate() {
+                date = new Date();
+                date.setDate(date.getDate() - 1);
+                return date;
             };
 
             // Disable autocomplete on form fields
@@ -98,13 +94,19 @@
                         label: "Start Date:",
                         name: "Program.StartDate",
                         type: "datetime",
-                        format: "M/DD/YYYY"
+                        format: "M/DD/YYYY",
+                        opts: {
+                            minDate: getMinDate()
+                        }
                     },
                     {
                         label: "End Date:",
                         name: "Program.EndDate",
                         type: "datetime",
-                        format: "M/DD/YYYY"
+                        format: "M/DD/YYYY",
+                        opts: {
+                            minDate: getMinDate()
+                        }
                     },
                     {
                         label: "Sunday:",
@@ -226,16 +228,135 @@
                 ]
             });
 
-            //// Round hours to whole hours
-            //editor.on('opened', function () {
-            //    editor.field('Program.StartTime').input().on('change', function () {
-
-            //        var time = editor.field('Program.StartTime').val();
-            //        var searchValue = time.substr(time.indexOf(':') + 1, 2);
-            //        time = time.replace(searchValue, "00");
-            //        editor.field('Program.StartTime').val(time);
-            //    });
-            //});
+            // View Form
+            var view = new $.fn.dataTable.Editor({
+                ajax: '/api/GetPrograms',
+                table: '#Programs',
+                fields: [
+                    {
+                        name: "Program.ProgramId",
+                        type: "hidden"
+                    },
+                    {
+                        label: "Name:",
+                        name: "Program.ProgramName"
+                    },
+                    {
+                        label: "Description:",
+                        name: "Program.ProgramDescription",
+                        type: 'textarea'
+                    },
+                    {
+                        label: "Start Date:",
+                        name: "Program.StartDate",
+                        type: "datetime"
+                    },
+                    {
+                        label: "End Date:",
+                        name: "Program.EndDate",
+                        type: "datetime"
+                    },
+                    {
+                        label: "Sunday:",
+                        name: "Program.Sunday",
+                        type: "checkbox",
+                        options: [
+                            { label: "", "value": "True" }
+                        ],
+                        separator: "|",
+                        unselectedValue: "False"
+                    },
+                    {
+                        label: "Monday:",
+                        name: "Program.Monday",
+                        type: "checkbox",
+                        options: [
+                            { label: "", "value": "True" }
+                        ],
+                        separator: "|",
+                        unselectedValue: "False"
+                    },
+                    {
+                        label: "Tuesday:",
+                        name: "Program.Tuesday",
+                        type: "checkbox",
+                        options: [
+                            { label: "", "value": "True" }
+                        ],
+                        separator: "|",
+                        unselectedValue: "False"
+                    },
+                    {
+                        label: "Wednesday:",
+                        name: "Program.Wednesday",
+                        type: "checkbox",
+                        options: [
+                            { label: "", "value": "True" }
+                        ],
+                        separator: "|",
+                        unselectedValue: "False"
+                    },
+                    {
+                        label: "Thursday:",
+                        name: "Program.Thursday",
+                        type: "checkbox",
+                        options: [
+                            { label: "", "value": "True" }
+                        ],
+                        separator: "|",
+                        unselectedValue: "False"
+                    },
+                    {
+                        label: "Friday:",
+                        name: "Program.Friday",
+                        type: "checkbox",
+                        options: [
+                            { label: "", "value": "True" }
+                        ],
+                        separator: "|",
+                        unselectedValue: "False"
+                    },
+                    {
+                        label: "Saturday:",
+                        name: "Program.Saturday",
+                        type: "checkbox",
+                        options: [
+                            { label: "", "value": "True" }
+                        ],
+                        separator: "|",
+                        unselectedValue: "False"
+                    },
+                    {
+                        label: "Start Time:",
+                        name: "Program.StartTime",
+                        id: "programStartTime",
+                        type: 'datetime'
+                    },
+                    {
+                        label: "End Time:",
+                        name: "Program.EndTime",
+                        id: "programEndTime",
+                        type: 'datetime'
+                    },
+                    {
+                        label: "Capacity:",
+                        name: "Program.MaxParticipants"
+                    },
+                    {
+                        label: "Member Price:",
+                        name: "Program.MemberPrice"
+                    },
+                    {
+                        label: "Non-member Price:",
+                        name: "Program.NonMemberPrice"
+                    },
+                    {
+                        label: "Instructor:",
+                        name: "Program.InstructorId",
+                        type: 'select'
+                    }
+                ]
+            });
 
             // Clear button : start time
             $('<i id="clearStartTime" class="fa fa-close" style="position:absolute;top: 23%;right: 18%;"></i>').insertBefore(
@@ -319,18 +440,70 @@
             // Hide CRUD buttons from certain users
             if (!(roleLevel >= 3)) {
                 $('#editButton').hide();
-
-                // Open editor edit API on selected row with all fields disabled.
-                $('#Programs tbody').on('dblclick', 'tr', function (e) {
-                    editor.edit(this, {
-                        title: 'View program'
-                    }).disable();
-                });
             }
 
             if (!(roleLevel >= 4)) {
                 $('#newButton').hide();
                 $('#deleteButton').hide();
             }
+
+            // On row double click.
+            $('#Programs tbody').on('dblclick', 'tr', function (e) {
+                // If user is logged in, display register button; else, just display program.
+                if (roleLevel >= 1) {
+                    view.edit(this, {
+                        title: 'View program',
+                        buttons: [
+                            {
+                                text: 'Register', action: function () {
+
+                                    // AJAX request to register user.
+                                    $.ajax({
+                                        url: '@Url.Action("RegisterUser", "Register")',
+                                        type: 'POST',
+                                        data: {
+                                            'program': view.field('Program.ProgramId').val(),
+                                            'user': "@User.Identity.GetUserId()"
+                                        },
+                                        success: function (data) {
+                                            view.close();
+
+                                            if (data.success == true) {
+                                                view
+                                                    .title('Success')
+                                                    .buttons({
+                                                        text: 'Close', action: function () {
+                                                            this.close();
+                                                        }
+                                                    })
+                                                    .message('Register complete!')
+                                                    .remove(true);
+                                            }
+                                            else {
+                                                view
+                                                    .title(data.errorTitle)
+                                                    .buttons({
+                                                        text: 'Close', action: function () {
+                                                            this.close();
+                                                        }
+                                                    })
+                                                    .message(data.errorMessage)
+                                                    .remove(true);
+                                            }
+                                        },
+                                        error: function (xhr, httpStatusMessage, customErrorMessage) {
+
+                                        }
+                                    });
+                                }
+                            }
+                        ]
+                    }).disable();
+                } else {
+                    view.edit(this, {
+                        title: 'View program'
+                    }).disable();
+                }
+            });
         });</script>
 }

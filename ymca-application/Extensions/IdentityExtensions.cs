@@ -36,5 +36,20 @@ namespace ymca_application.Extensions
                 return 0;
             }
         }
+
+        public static string GetUserId(this IIdentity identity)
+        {
+            var claim = ((ClaimsIdentity)identity).FindFirst("UserId");
+
+            // Make sure claim is not null or empty before returning.
+            if (claim != null && !String.IsNullOrEmpty(claim.Value))
+            {
+                return claim.Value;
+            }
+            else
+            {
+                return string.Empty;
+            }
+        }
     }
 }
