@@ -2,10 +2,35 @@
     ViewBag.Title = "General Information";
 }
 <h2>@ViewBag.Title.</h2>
-<h3>Non-Members</h3>
 
-<p>Information about Non-Member accounts (pricing, signing up, etc)</p>
+<div class="info">
+    <h3>Non-Members</h3>
+    <p>As a non-member, you will get access to all of the world class programs we have to offer, along with access to our state of the art facilities.
+        Non-member's will pay the higher non-member fee when signing up for classes, but do not need to pay the monthly fee associated with being a member.
+        This option is best suited for those looking to sign up for only a few classes over a short period of time. Follow these steps to get your non-member
+        account set up today!</p>
 
-<h3>Members</h3>
+    <ol>
+        <li>Click "Register", located in the upper right hand corner of this web-page</li>
+        <li>Fill out all information fields</li>
+        <li>Click "Register" at the end of the registration form</li>
+        <li>Congrats! Your account has been created and you can start signing up for classes</li>
+    </ol>
+</div>
 
-<p>Information about Member accounts (pricing, signing up, etc)</p>
+
+<div class="info">
+    <h3>Members</h3>
+    <p>
+        As a member, you will get access to all of the world class programs and facilities offered to non-members, but at a reduced price! Price reductions may vary
+        from class to class,but you can check the price differences by taking a look at our program offerings @Html.ActionLink("here", "Programs", "Home").
+        This option is best suited for those looking to sign up for YMCA classes regularly for an extended period of time. If that sounds like you,
+        become a member today and take advantage of these awesome savings!
+    </p>
+
+    <ol>
+        <li>If you do not already have a YMCA account with us, follow the instructions on creating a non-member account above</li>
+        <li>Once you have a YMCA account created, or if you already have one active, call 608.345.6789 to have your account upgraded!</li>
+    </ol>
+</div>
+
