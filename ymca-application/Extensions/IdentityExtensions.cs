@@ -16,10 +16,7 @@ namespace ymca_application.Extensions
             {
                 return claim.Value;
             }
-            else
-            {
                 return string.Empty;
-            }
         }
 
         public static int GetRole(this IIdentity identity)
@@ -31,10 +28,7 @@ namespace ymca_application.Extensions
             {
                 return int.Parse(claim.Value);
             }
-            else
-            {
                 return 0;
-            }
         }
 
         public static string GetUserId(this IIdentity identity)
@@ -46,10 +40,7 @@ namespace ymca_application.Extensions
             {
                 return claim.Value;
             }
-            else
-            {
                 return string.Empty;
-            }
         }
     }
 }
