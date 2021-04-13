@@ -186,7 +186,9 @@
     <Compile Include="Controllers\Administration\UserController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
-    <Compile Include="Controllers\ProgramController.cs" />
+    <Compile Include="Controllers\Program\ParticipantController.cs" />
+    <Compile Include="Controllers\Program\ProgramController.cs" />
+    <Compile Include="Controllers\Program\RegisterController.cs" />
     <Compile Include="Extensions\IdentityExtensions.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -194,6 +196,8 @@
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
+    <Compile Include="Models\ProgramParticipantModels.cs" />
+    <Compile Include="Models\ProgramModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
@@ -227,6 +231,7 @@
     <Content Include="Content\DataTables\Editor-1.9.6\js\editor.semanticui.js" />
     <Content Include="Content\DataTables\Editor-1.9.6\js\editor.semanticui.min.js" />
     <Content Include="Content\DataTables\net47 dll\DataTables-Editor-Server.dll" />
+    <Content Include="Content\Functions.js" />
     <Content Include="Content\Images\ymca-logo.png" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
@@ -246,6 +251,7 @@
     <Content Include="Content\DataTables\Editor-1.9.6\css\scss\processing.scss" />
     <Content Include="Content\DataTables\Editor-1.9.6\css\scss\upload.scss" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
+    <Content Include="Scripts\editor.mask.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
     <Content Include="Scripts\jquery-3.3.1.min.js" />
     <Content Include="Scripts\jquery-3.3.1.slim.js" />
@@ -293,6 +299,7 @@
     <Content Include="Views\Shared\Programs.cshtml" />
     <Content Include="Views\Administration\Index.cshtml" />
     <Content Include="Views\Administration\Users.cshtml" />
+    <Content Include="Views\Manage\Update.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

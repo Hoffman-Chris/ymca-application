@@ -23,15 +23,28 @@ textarea {
     max-width: 280px;
 }
 
+/* YMCA logo in navbar */
 #ymca-logo {
     height: 50px;
     width: 70px;
 }
 
-/*div.editor-datetime-minutes {
-    display: none;
-}*/
-
+/* DataTables Editor form height */
 div.DTED_Lightbox_Wrapper div.DTED_Lightbox_Container div.DTED_Lightbox_Content_Wrapper div.DTED_Lightbox_Content div.DTE div.DTE_Body_Content {
     max-height: 75vh !important;
+}
+
+/* DataTables Editor form weekday formatting */
+div.DTE div.DTE_Body_Content div.DTE_Form_Content div.DTE_Field.DTE_Field_Type_datetime.DTE_Field_Name_Program\.EndDate {
+    padding-bottom: 10px;
+}
+
+div.DTE div.DTE_Body_Content div.DTE_Form_Content div.DTE_Field.DTE_Field_Type_checkbox, div.DTE div.DTE_Body_Content div.DTE_Form_Content div.DTE_Field.DTE_Field_Type_checkbox label.DTE_Label {
+    padding-top: 0px;
+    padding-bottom: 0px;
+}
+
+/* viewParticipants Form  */
+participants-template {
+    padding-left: 6px;
 }

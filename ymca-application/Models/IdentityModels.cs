@@ -18,6 +18,7 @@ namespace ymca_application.Models
         public string State { get; set; }
         public string Zip { get; set; }
         public int Role { get; set; }
+        public Boolean Active { get; set; }
         public DateTime JoinDate { get; set; }
 
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager)
@@ -28,6 +29,7 @@ namespace ymca_application.Models
             // Add custom user claims here
             userIdentity.AddClaim(new Claim("FirstName", this.FirstName));
             userIdentity.AddClaim(new Claim("Role", this.Role.ToString(), ClaimValueTypes.Integer32));
+            userIdentity.AddClaim(new Claim("UserId", this.Id));
 
             return userIdentity;
         }

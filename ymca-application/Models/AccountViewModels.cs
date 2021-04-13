@@ -79,34 +79,6 @@ namespace ymca_application.Models
         public string Email { get; set; }
 
         [Required]
-        [Phone]
-        [Display(Name = "Phone Number")]
-        public string PhoneNumber { get; set; }
-
-        [Required]
-        [Display(Name = "Address 1")]
-        public string Address1 { get; set; }
-
-        [Display(Name = "Address 2")]
-        public string Address2 { get; set; }
-
-        [Required]
-        [Display(Name = "City")]
-        public string City { get; set; }
-
-        [Required]
-        [Display(Name = "State")]
-        public string State { get; set; }
-
-        [Required]
-        [Display(Name = "Zip")]
-        public string Zip { get; set; }
-
-        [Required]
-        [Display(Name = "Join Date")]
-        public DateTime JoinDate { get; set; }
-
-        [Required]
         [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 6)]
         [DataType(DataType.Password)]
         [Display(Name = "Password")]

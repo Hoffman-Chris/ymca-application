@@ -21,14 +21,13 @@
                     <span class="icon-bar"></span>
                 </button>
                 <a href='@Url.Action("Index", "Home")'> <img class="navbar-brand" src='@Url.Content("~/Content/Images/ymca-logo.png")' /></a>
-                @*@Html.ActionLink("YMCA", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })*@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     <li>@Html.ActionLink("About", "About", "Home")</li>
                     <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
                     <li>@Html.ActionLink("Programs", "Programs", "Home")</li>
-                    @if (User.Identity.GetRole() == 5)
+                    @if (User.Identity.GetRole() >= 4)
                     {
                         <li id="usersLink">@Html.ActionLink("Administration", "Index", "Administration")</li>
                     }
@@ -48,5 +47,10 @@
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)
+
+    <script type="text/javascript" charset="utf-8" src="~/Content/Functions.js"></script>
+    <script type="text/javascript" charset="utf-8" src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.10/jquery.mask.js"></script>
+    <script type="text/javascript" charset="utf-8" src="~/Scripts/editor.mask.js"></script>
+
 </body>
 </html>

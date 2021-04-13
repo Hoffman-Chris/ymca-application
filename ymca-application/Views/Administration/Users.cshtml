@@ -10,10 +10,11 @@
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
 
     <title>Users</title>
-
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.22/css/jquery.dataTables.min.css" />
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/1.6.5/css/buttons.dataTables.min.css" />
-    <link rel="stylesheet" type="text/css" href="https://editor.datatables.net/extensions/Editor/css/editor.dataTables.min.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/select/1.3.1/css/select.dataTables.min.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="~/Content/DataTables/Editor-1.9.6/css/editor.dataTables.min.css" />
 </head>
 <body class="dataTables">
     <div class="container">
@@ -34,15 +35,16 @@
 </html>
 
 @section scripts{
+    <script type="text/javascript" charset="utf-8" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="https://code.jquery.com/jquery-3.5.1.js"></script>
     <script type="text/javascript" charset="utf-8" src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"></script>
     <script type="text/javascript" charset="utf-8" src="https://cdn.datatables.net/buttons/1.6.5/js/dataTables.buttons.min.js"></script>
     <script type="text/javascript" charset="utf-8" src="https://cdn.datatables.net/select/1.3.1/js/dataTables.select.min.js"></script>
-    <script src="~/Content/DataTables/Editor-1.9.6/js/dataTables.editor.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="~/Content/DataTables/Editor-1.9.6/js/dataTables.editor.min.js"></script>
 
     <script>
 
-        var editor;
-        var defaultLength = 25;
+        var userForm, defaultUserFormLength = 25, defaultUserFormSort = 0;
         $(document).ready(function () {
 
             // Disable autocomplete on form fields
@@ -52,8 +54,8 @@
                 }
             });
 
-            // Editor Form
-            var editor = new $.fn.dataTable.Editor({
+            // User Form
+            var userForm = new $.fn.dataTable.Editor({
                 ajax: '/api/GetUsers',
                 table: '#Users',
                 fields: [
@@ -121,30 +123,32 @@
             });
 
             // Disable date field from being edited.
-            editor.field('AspNetUsers.JoinDate').disable();
+            userForm.field('AspNetUsers.JoinDate').disable();
 
-            // Defailt active to true on create event.
-            editor.on('initCreate', function () {
-                editor.field('AspNetUsers.Active').val("True")
+            // On initCreate event.
+            userForm.on('initCreate', function () {
+                // Default active to true on create event.
+                userForm.field('AspNetUsers.Active').val("True")
             });
 
-            // If the Active is active on form submission set the date to null; else, set the date to the end of time.
-            editor.on('initSubmit', function () {
-                if (editor.field('AspNetUsers.Active').val() === "True") {
-                    editor.field('AspNetUsers.LockoutEndDateUtc').set(null);
+            // On initSubmit event.
+            userForm.on('initSubmit', function () {
+                // If the Active is active on form submission set the date to null; else, set the date to the end of time.
+                if (userForm.field('AspNetUsers.Active').val() === "True") {
+                    userForm.field('AspNetUsers.LockoutEndDateUtc').set(null);
                 } else {
-                    editor.field('AspNetUsers.LockoutEndDateUtc').set('9999-12-31');
+                    userForm.field('AspNetUsers.LockoutEndDateUtc').set('9999-12-31');
                 }
             });
 
-            // DataTables table
-            var table = $('#Users').DataTable({
+            // User table
+            var userTable = $('#Users').DataTable({
                 autoWidth: false,
                 select: {
                     style: 'single'
                 },
                 // Default table lengths
-                lengthMenu: [[defaultLength, 50, 100, -1], [defaultLength, 50, 100, "All"]],
+                lengthMenu: [[defaultUserFormLength, 50, 100, -1], [defaultUserFormLength, 50, 100, "All"]],
                 // Table data source
                 ajax: {
                     url: '/api/GetUsers'
@@ -161,26 +165,28 @@
                 // Default table order
                 order: [[0, "asc"]],
                 buttons: [
-                    { extend: "create", editor: editor, formTitle: 'Create new user', attr: { id: 'newButton' } },
-                    { extend: "edit", editor: editor, formTitle: 'Edit existing user', attr: { id: 'editButton' } },
+                    { extend: "create", editor: userForm, formTitle: 'Create new user', attr: { id: 'newButton' } },
+                    { extend: "edit", editor: userForm, formTitle: 'Edit existing user', attr: { id: 'editButton' } },
                     {
                         // Show default view filter button
                         text: 'Show Default View', action: function (e, dt, node, config) {
-                            table.search('')
+                            userTable.search('')
                                 .columns().search('')
                                 .columns().order('')
-                                .page.len(defaultLength)
-                                .column(0).order('asc').draw();
+                                .page.len(defaultUserFormLength)
+                                .column(defaultUserFormSort).order('asc').draw();
                         }
                     }
                 ]
             });
 
-            // Disable buttons unless row is selected.
-            table.on('select deselect', function () {
-                var selectedRows = table.rows({ selected: true }).count();
-                table.button(1).enable(selectedRows === 1);
+            // On select deselect event.
+            userTable.on('select deselect', function () {
+                // Disable buttons unless row is selected.
+                var selectedRows = userTable.rows({ selected: true }).count();
+                userTable.button(1).enable(selectedRows === 1);
             });
 
-        });</script>
+        });
+    </script>
 }
