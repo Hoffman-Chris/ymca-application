@@ -18,6 +18,7 @@ namespace ymca_application.Models
         public string State { get; set; }
         public string Zip { get; set; }
         public int Role { get; set; }
+        public Boolean Active { get; set; }
         public DateTime JoinDate { get; set; }
 
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager)
