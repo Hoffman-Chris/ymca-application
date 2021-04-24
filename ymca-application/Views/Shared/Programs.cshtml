@@ -45,7 +45,7 @@
                     <th>Days</th>
                     <th>Dates</th>
                     <th>Time</th>
-                    <th>Capacity</th>
+                    <th>Participants</th>
                     <th>Members</th>
                     <th>Non-members</th>
                     <th>Instructor</th>
@@ -66,11 +66,11 @@
     <script type="text/javascript" charset="utf-8" src="~/Content/DataTables/Editor-1.9.6/js/dataTables.editor.min.js"></script>
 
     <script>
-        var programForm, defaultProgramTableLength = 25, defaultProgramTableSort = 3;
+        var programForm, initMaxParticipants, initCurrParticipants, currNumParticipants, defaultProgramTableLength = 25, defaultProgramTableSort = 3;
         var viewForm;
         var participantForm, participantsTable, participantProgram, participantProgramName, defaultParticipantLength = 10, defaultParticipantSort = 0;
         var weekDays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-        var roleLevel = "@User.Identity.GetRole()";
+        var roleLevel = '@User.Identity.GetRole()';
         $(document).ready(function () {
 
             // Function to get min date for programs.
@@ -93,141 +93,147 @@
                 table: '#Programs',
                 fields: [
                     {
-                        label: "Name:",
-                        name: "Program.ProgramName"
+                        label: 'Name:',
+                        name: 'Program.ProgramName'
                     },
                     {
-                        label: "Description:",
-                        name: "Program.ProgramDescription",
+                        label: 'Description:',
+                        name: 'Program.ProgramDescription',
                         type: 'textarea'
                     },
                     {
-                        label: "Start Date:",
-                        name: "Program.StartDate",
-                        type: "datetime",
-                        format: "M/DD/YYYY",
+                        label: 'Start Date:',
+                        name: 'Program.StartDate',
+                        type: 'datetime',
+                        format: 'M/DD/YYYY',
                         opts: {
                             minDate: getMinDate()
                         },
                         keyInput: false
                     },
                     {
-                        label: "End Date:",
-                        name: "Program.EndDate",
-                        id: "programEndDate",
-                        type: "datetime",
-                        format: "M/DD/YYYY",
+                        label: 'End Date:',
+                        name: 'Program.EndDate',
+                        id: 'programEndDate',
+                        type: 'datetime',
+                        format: 'M/DD/YYYY',
                         opts: {
                             minDate: getMinDate()
                         },
                         keyInput: false
                     },
                     {
-                        label: "Days of the Week:",
-                        name: "Program.Sunday",
-                        type: "checkbox",
+                        label: 'Days of the Week:',
+                        name: 'Program.Sunday',
+                        type: 'checkbox',
                         options: [
-                            { label: "", "value": "True" }
+                            { label: '', 'value': 'True' }
                         ],
-                        separator: "|",
-                        unselectedValue: "False"
+                        separator: '|',
+                        unselectedValue: 'False'
                     },
                     {
-                        name: "Program.Monday",
-                        type: "checkbox",
+                        name: 'Program.Monday',
+                        type: 'checkbox',
                         options: [
-                            { label: "", "value": "True" }
+                            { label: '', 'value': 'True' }
                         ],
-                        separator: "|",
-                        unselectedValue: "False"
+                        separator: '|',
+                        unselectedValue: 'False'
                     },
                     {
-                        name: "Program.Tuesday",
-                        type: "checkbox",
+                        name: 'Program.Tuesday',
+                        type: 'checkbox',
                         options: [
-                            { label: "", "value": "True" }
+                            { label: '', 'value': 'True' }
                         ],
-                        separator: "|",
-                        unselectedValue: "False"
+                        separator: '|',
+                        unselectedValue: 'False'
                     },
                     {
-                        name: "Program.Wednesday",
-                        type: "checkbox",
+                        name: 'Program.Wednesday',
+                        type: 'checkbox',
                         options: [
-                            { label: "", "value": "True" }
+                            { label: '', 'value': 'True' }
                         ],
-                        separator: "|",
-                        unselectedValue: "False"
+                        separator: '|',
+                        unselectedValue: 'False'
                     },
                     {
-                        name: "Program.Thursday",
-                        type: "checkbox",
+                        name: 'Program.Thursday',
+                        type: 'checkbox',
                         options: [
-                            { label: "", "value": "True" }
+                            { label: '', 'value': 'True' }
                         ],
-                        separator: "|",
-                        unselectedValue: "False"
+                        separator: '|',
+                        unselectedValue: 'False'
                     },
                     {
-                        name: "Program.Friday",
-                        type: "checkbox",
+                        name: 'Program.Friday',
+                        type: 'checkbox',
                         options: [
-                            { label: "", "value": "True" }
+                            { label: '', 'value': 'True' }
                         ],
-                        separator: "|",
-                        unselectedValue: "False"
+                        separator: '|',
+                        unselectedValue: 'False'
                     },
                     {
-                        name: "Program.Saturday",
-                        type: "checkbox",
+                        name: 'Program.Saturday',
+                        type: 'checkbox',
                         options: [
-                            { label: "", "value": "True" }
+                            { label: '', 'value': 'True' }
                         ],
-                        separator: "|",
-                        unselectedValue: "False"
+                        separator: '|',
+                        unselectedValue: 'False'
                     },
                     {
-                        label: "Start Time:",
-                        name: "Program.StartTime",
-                        id: "programStartTime",
+                        label: 'Start Time:',
+                        name: 'Program.StartTime',
+                        id: 'programStartTime',
                         type: 'datetime',
                         format: 'h:mm A',
                         keyInput: false
                     },
                     {
-                        label: "End Time:",
-                        name: "Program.EndTime",
-                        id: "programEndTime",
+                        label: 'End Time:',
+                        name: 'Program.EndTime',
+                        id: 'programEndTime',
                         type: 'datetime',
                         format: 'h:mm A',
                         keyInput: false
                     },
                     {
-                        label: "Capacity:",
-                        name: "Program.MaxParticipants",
+                        label: 'Capacity:',
+                        name: 'Program.MaxParticipants',
                         attr: {
-                            type: "number"
+                            type: 'number'
                         }
                     },
                     {
-                        label: "Member Price:",
-                        name: "Program.MemberPrice",
+                        label: 'Current Capacity:',
+                        name: 'Program.CurrentParticipants',
+                        def: 0,
+                        type: 'hidden'
+                    },
+                    {
+                        label: 'Member Price:',
+                        name: 'Program.MemberPrice',
                         attr: {
-                            type: "number"
+                            type: 'number'
                         }
                     },
                     {
-                        label: "Non-member Price:",
-                        name: "Program.NonMemberPrice",
+                        label: 'Non-member Price:',
+                        name: 'Program.NonMemberPrice',
                         attr: {
-                            type: "number"
+                            type: 'number'
                         }
                     },
                     {
-                        label: "Instructor:",
-                        name: "Program.InstructorId",
+                        label: 'Instructor:',
+                        name: 'Program.InstructorId',
                         type: 'select',
-                        placeholder: "Select an instructor"
+                        placeholder: 'Select an instructor'
                     }
                 ]
             });
@@ -238,119 +244,123 @@
                 table: '#Programs',
                 fields: [
                     {
-                        name: "Program.ProgramId",
-                        type: "hidden"
+                        name: 'Program.ProgramId',
+                        type: 'hidden'
                     },
                     {
-                        label: "Name:",
-                        name: "Program.ProgramName"
+                        label: 'Name:',
+                        name: 'Program.ProgramName'
                     },
                     {
-                        label: "Description:",
-                        name: "Program.ProgramDescription",
+                        label: 'Description:',
+                        name: 'Program.ProgramDescription',
                         type: 'textarea'
                     },
                     {
-                        label: "Start Date:",
-                        name: "Program.StartDate",
-                        type: "datetime"
-                    },
-                    {
-                        label: "End Date:",
-                        name: "Program.EndDate",
-                        type: "datetime"
-                    },
-                    {
-                        label: "Days of the Week:",
-                        name: "Program.Sunday",
-                        type: "checkbox",
-                        options: [
-                            { label: "", "value": "True" }
-                        ],
-                        separator: "|",
-                        unselectedValue: "False"
-                    },
-                    {
-                        name: "Program.Monday",
-                        type: "checkbox",
-                        options: [
-                            { label: "", "value": "True" }
-                        ],
-                        separator: "|",
-                        unselectedValue: "False"
-                    },
-                    {
-                        name: "Program.Tuesday",
-                        type: "checkbox",
-                        options: [
-                            { label: "", "value": "True" }
-                        ],
-                        separator: "|",
-                        unselectedValue: "False"
-                    },
-                    {
-                        name: "Program.Wednesday",
-                        type: "checkbox",
-                        options: [
-                            { label: "", "value": "True" }
-                        ],
-                        separator: "|",
-                        unselectedValue: "False"
-                    },
-                    {
-                        name: "Program.Thursday",
-                        type: "checkbox",
-                        options: [
-                            { label: "", "value": "True" }
-                        ],
-                        separator: "|",
-                        unselectedValue: "False"
-                    },
-                    {
-                        name: "Program.Friday",
-                        type: "checkbox",
-                        options: [
-                            { label: "", "value": "True" }
-                        ],
-                        separator: "|",
-                        unselectedValue: "False"
-                    },
-                    {
-                        name: "Program.Saturday",
-                        type: "checkbox",
-                        options: [
-                            { label: "", "value": "True" }
-                        ],
-                        separator: "|",
-                        unselectedValue: "False"
-                    },
-                    {
-                        label: "Start Time:",
-                        name: "Program.StartTime",
-                        id: "programStartTime",
+                        label: 'Start Date:',
+                        name: 'Program.StartDate',
                         type: 'datetime'
                     },
                     {
-                        label: "End Time:",
-                        name: "Program.EndTime",
-                        id: "programEndTime",
+                        label: 'End Date:',
+                        name: 'Program.EndDate',
                         type: 'datetime'
                     },
                     {
-                        label: "Capacity:",
-                        name: "Program.MaxParticipants"
+                        label: 'Days of the Week:',
+                        name: 'Program.Sunday',
+                        type: 'checkbox',
+                        options: [
+                            { label: '', 'value': 'True' }
+                        ],
+                        separator: '|',
+                        unselectedValue: 'False'
                     },
                     {
-                        label: "Member Price:",
-                        name: "Program.MemberPrice"
+                        name: 'Program.Monday',
+                        type: 'checkbox',
+                        options: [
+                            { label: '', 'value': 'True' }
+                        ],
+                        separator: '|',
+                        unselectedValue: 'False'
                     },
                     {
-                        label: "Non-member Price:",
-                        name: "Program.NonMemberPrice"
+                        name: 'Program.Tuesday',
+                        type: 'checkbox',
+                        options: [
+                            { label: '', 'value': 'True' }
+                        ],
+                        separator: '|',
+                        unselectedValue: 'False'
                     },
                     {
-                        label: "Instructor:",
-                        name: "Program.InstructorId",
+                        name: 'Program.Wednesday',
+                        type: 'checkbox',
+                        options: [
+                            { label: '', 'value': 'True' }
+                        ],
+                        separator: '|',
+                        unselectedValue: 'False'
+                    },
+                    {
+                        name: 'Program.Thursday',
+                        type: 'checkbox',
+                        options: [
+                            { label: '', 'value': 'True' }
+                        ],
+                        separator: '|',
+                        unselectedValue: 'False'
+                    },
+                    {
+                        name: 'Program.Friday',
+                        type: 'checkbox',
+                        options: [
+                            { label: '', 'value': 'True' }
+                        ],
+                        separator: '|',
+                        unselectedValue: 'False'
+                    },
+                    {
+                        name: 'Program.Saturday',
+                        type: 'checkbox',
+                        options: [
+                            { label: '', 'value': 'True' }
+                        ],
+                        separator: '|',
+                        unselectedValue: 'False'
+                    },
+                    {
+                        label: 'Start Time:',
+                        name: 'Program.StartTime',
+                        id: 'programStartTime',
+                        type: 'datetime'
+                    },
+                    {
+                        label: 'End Time:',
+                        name: 'Program.EndTime',
+                        id: 'programEndTime',
+                        type: 'datetime'
+                    },
+                    {
+                        label: 'Capacity:',
+                        name: 'Program.MaxParticipants'
+                    },
+                    {
+                        label: 'Number of Participants:',
+                        name: 'Program.CurrentParticipants'
+                    },
+                    {
+                        label: 'Member Price:',
+                        name: 'Program.MemberPrice'
+                    },
+                    {
+                        label: 'Non-member Price:',
+                        name: 'Program.NonMemberPrice'
+                    },
+                    {
+                        label: 'Instructor:',
+                        name: 'Program.InstructorId',
                         type: 'select'
                     }
                 ]
@@ -409,7 +419,13 @@
                             return data.Program.StartTime + ' - ' + data.Program.EndTime;
                         }
                     },
-                    { data: "Program.MaxParticipants" },
+                    {
+                        data: null, render: function (data, type, row) {
+                            if (data.Program.CurrentParticipants === null) return '- / ' + data.Program.MaxParticipants
+                            if (data.Program.CurrentParticipants === data.Program.MaxParticipants) return 'FULL'
+                            return data.Program.CurrentParticipants + ' / ' + data.Program.MaxParticipants
+                        }
+                    },
                     { data: "Program.MemberPrice", render: $.fn.dataTable.render.number(',', '.', 2, '$') },
                     { data: "Program.NonMemberPrice", render: $.fn.dataTable.render.number(',', '.', 2, '$') },
                     {
@@ -496,6 +512,9 @@
                                                     .message(data.errorMessage)
                                                     .remove(true);
                                             }
+
+                                            // Refresh table data.
+                                            programTable.ajax.reload();
                                         }
                                     });
                                 }
@@ -522,7 +541,6 @@
                             },
                             {
                                 text: 'Register', action: function () {
-
                                     // AJAX request to register user.
                                     $.ajax({
                                         url: '@Url.Action("RegisterUser", "Register")',
@@ -556,6 +574,9 @@
                                                     .message(data.errorMessage)
                                                     .remove(true);
                                             }
+
+                                            // Refresh table data.
+                                            programTable.ajax.reload();
                                         },
                                         error: function (xhr, httpStatusMessage, customErrorMessage) {
 
@@ -662,26 +683,30 @@
                                             },
                                             {
                                                 text: 'Delete', action: function () {
-                                                // AJAX request to delete product.
-                                                $.ajax({
-                                                    url: '@Url.Action("DeleteProgramParticipant", "DeleteProgramParticipant")',
-                                                    type: 'POST',
-                                                    data: {
-                                                        program: programId,
-                                                        user: userId
-                                                    },
-                                                    error: function (error) {
-                                                        console.log(`Error ${error}`);
-                                                    },
-                                                    success: function () {
-                                                        participantForm.close();
-                                                    }
-                                                })
+                                                    // AJAX request to delete product.
+                                                    $.ajax({
+                                                        url: '@Url.Action("DeleteProgramParticipant", "DeleteProgramParticipant")',
+                                                        type: 'POST',
+                                                        data: {
+                                                            program: programId,
+                                                            user: userId
+                                                        },
+                                                        error: function (error) {
+                                                            console.log(`Error ${error}`);
+                                                        },
+                                                        success: function () {
+                                                            // Close participantForm.
+                                                            participantForm.close();
+
+                                                            // Reload table data.
+                                                            programTable.ajax.reload();
+                                                        }
+                                                    });
+                                                }
                                             }
-                                        }
-                                    ]
-                                }
-                            );
+                                        ]
+                                    }
+                                );
                         },
                         enabled: false
                         },
@@ -706,7 +731,7 @@
                 });
             });
 
-            // On programForm open.
+            // On programForm open event.
             programForm.on('open', function (e, o, action) {
                 // Add week day labels.
                 weekDays.forEach(day => {
@@ -795,6 +820,8 @@
                         programForm.field('Program.MaxParticipants').error('Please enter a whole number.');
                     } else if (programForm.field('Program.MaxParticipants').val() < 1) {
                         programForm.field('Program.MaxParticipants').error('Program must contain at least 1 participant.');
+                    } else if (programForm.field('Program.MaxParticipants').val() < programForm.field('Program.CurrentParticipants').val()) {
+                        programForm.field('Program.MaxParticipants').error('Program capacity must be greater than or equal to current number of participants.');
                     }
 
                     // Member Price

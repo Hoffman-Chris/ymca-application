@@ -197,31 +197,5 @@ namespace ymca_application.Controllers
                 }
             }
         }
-
-       
-        public ActionResult ViewParticipants(int program)
-        {
-            using (SqlConnection connection = new SqlConnection { ConnectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString })
-            {
-                string queryString = "SELECT FirstName, LastName, Email FROM ProgramParticipants JOIN AspNetUsers ON ProgramParticipants.UserId = AspNetUsers.Id WHERE ProgramId = " + program.ToString();
-                SqlCommand command = new SqlCommand(queryString, connection);
-
-                connection.Open();
-                List<ProgramParticipantsModel> result = new List<ProgramParticipantsModel>();
-                using (SqlDataReader reader = command.ExecuteReader())
-                {
-                    while (reader.Read())
-                    {
-                        var nextPerson = new ProgramParticipantsModel();
-                        nextPerson.FirstName = (string)reader[0];
-                        nextPerson.LastName = (string)reader[1];
-                        nextPerson.Email = (string)reader[2];
-                        result.Add(nextPerson);
-                    }
-                }
-                connection.Close();
-                return View("Programs", result);
-            }
-            }
     }
 }

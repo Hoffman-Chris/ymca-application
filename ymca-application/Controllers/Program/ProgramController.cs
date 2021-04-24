@@ -59,6 +59,8 @@ namespace ymca_application.Controllers
                     )
                     .Field(new Field("Program.MaxParticipants")
                     )
+                    .Field(new Field("Program.CurrentParticipants")
+                    )
                     .Field(new Field("Program.MemberPrice")
                     )
                     .Field(new Field("Program.NonMemberPrice")
