@@ -72,18 +72,6 @@
         var weekDays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
         var roleLevel = '@User.Identity.GetRole()';
         $(document).ready(function () {
-            // Hide CRUD buttons from certain users
-            if (!(roleLevel >= 3)) {
-                $('#editButton').hide();
-            } else {
-                defaultParticipantsSearchable = true;
-            }
-
-            if (!(roleLevel >= 4)) {
-                $('#newButton').hide();
-                $('#deleteButton').hide();
-            }
-
             // Function to get min date for programs.
             function getMinDate() {
                 date = new Date();
@@ -886,6 +874,18 @@
                 // Remove select deselect event handler.
                 participantsTable.off('select deselect');
             });
+
+            // Hide CRUD buttons from certain users
+            if (!(roleLevel >= 3)) {
+                $('#editButton').hide();
+            } else {
+                defaultParticipantsSearchable = true;
+            }
+
+            if (!(roleLevel >= 4)) {
+                $('#newButton').hide();
+                $('#deleteButton').hide();
+            }
         });
     </script>
 }
