@@ -72,6 +72,11 @@
         var weekDays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
         var roleLevel = '@User.Identity.GetRole()';
         $(document).ready(function () {
+            // Enable the ability to search for programs by user.
+            if (roleLevel >= 3) {
+                defaultParticipantsSearchable = true;
+            }
+
             // Function to get min date for programs.
             function getMinDate() {
                 date = new Date();
@@ -878,8 +883,6 @@
             // Hide CRUD buttons from certain users
             if (!(roleLevel >= 3)) {
                 $('#editButton').hide();
-            } else {
-                defaultParticipantsSearchable = true;
             }
 
             if (!(roleLevel >= 4)) {
