@@ -44,7 +44,7 @@
 
     <script>
 
-        var userForm, defaultUserFormLength = 25, defaultUserFormSort = 0;
+        var userForm, userTable, defaultUserFormLength = 25, defaultUserFormSort = 0;
         $(document).ready(function () {
 
             // Disable autocomplete on form fields
@@ -55,7 +55,7 @@
             });
 
             // User Form
-            var userForm = new $.fn.dataTable.Editor({
+            userForm = new $.fn.dataTable.Editor({
                 ajax: '/api/GetUsers',
                 table: '#Users',
                 fields: [
@@ -82,7 +82,7 @@
                     {
                         label: "Address 2:",
                         name: "AspNetUsers.Address2"
-                    },
+                   },
                     {
                         label: "City:",
                         name: "AspNetUsers.City"
@@ -108,6 +108,7 @@
                     {
                         label: "Active:",
                         name: "AspNetUsers.Active",
+                        id: "activeUser",
                         type: "checkbox",
                         options: [
                             { label: "", "value": "True" }
@@ -142,7 +143,7 @@
             });
 
             // User table
-            var userTable = $('#Users').DataTable({
+            userTable = $('#Users').DataTable({
                 autoWidth: false,
                 select: {
                     style: 'single'
@@ -153,13 +154,28 @@
                 ajax: {
                     url: '/api/GetUsers'
                 },
+                // Column defaults
+                columnDefs: [
+                    {
+                        targets: 4,
+                        visible: false
+                    }
+                ],
                 // Table columns
                 columns: [
                     { data: "AspNetUsers.FirstName" },
                     { data: "AspNetUsers.LastName" },
                     { data: "AspNetUsers.Email" },
-                    { data: "AspNetUsers.JoinDate" }
+                    { data: "AspNetUsers.JoinDate" },
+                    { data: "AspNetUsers.Active" }
                 ],
+                rowCallback: function (row, data) {
+                    if (data.AspNetUsers.Active === 'False') {
+                        $(row).addClass('disabled-user');
+                    } else {
+                        $(row).removeClass('disabled-user');
+                    }
+                },
                 // Control button layout
                 dom: '<"floatRight"B><"clear">lfrtip',
                 // Default table order
@@ -167,6 +183,64 @@
                 buttons: [
                     { extend: "create", editor: userForm, formTitle: 'Create new user', attr: { id: 'newButton' } },
                     { extend: "edit", editor: userForm, formTitle: 'Edit existing user', attr: { id: 'editButton' } },
+                    {
+                        text: 'Enable', attr: { id: 'enableButton' }, action: function () {
+                            // Get user row to be disabled.
+                            var row = userTable.rows({ selected: true });
+
+                            // Open remove API event on selected row.
+                            userForm.edit(row, false).set('AspNetUsers.Active', 'True').submit();
+
+                            // Switch enable/disable buttons
+                            $('#enableButton').hide();
+                            $('#disableButton').show();
+                        }
+                    },
+                    {
+                        text: 'Disable', attr: { id: 'disableButton' }, action: function () {
+                            // Get user row to be disabled.
+                            var row = userTable.rows({ selected: true });
+
+                            // Open remove API event on selected row.
+                            userForm.remove(
+                                row,
+                                {
+                                    title: 'Disable user',
+                                    message: '<p>Disabling this user will prevent the user from logging in and cancel their program registrations.</p><p>Are you sure you want to disable this user?</p>',
+                                    buttons: [
+                                        {
+                                            text: 'Cancel', action: function () {
+                                                // Close the remove form.
+                                                this.close();
+                                            }
+                                        },
+                                        {
+                                            text: 'Disable', action: function () {
+                                                // AJAX request to disable user.
+                                                $.ajax({
+                                                    url: '@Url.Action("DisableUser", "MVCUser")',
+                                                    type: 'POST',
+                                                    data: {
+                                                        UserId: row.data()[0].AspNetUsers.Id
+                                                    },
+                                                    error: function (error) {
+                                                        console.log(`Error ${error}`);
+                                                    },
+                                                    success: function () {
+                                                        // Close the remove form.
+                                                        userForm.close();
+
+                                                        // Reload table data.
+                                                        userTable.ajax.reload();
+                                                    }
+                                                });
+                                            }
+                                        }
+                                    ]
+                                }
+                            );
+                        }
+                    },
                     {
                         // Show default view filter button
                         text: 'Show Default View', action: function (e, dt, node, config) {
@@ -180,13 +254,26 @@
                 ]
             });
 
+            // Hide buttons by default.
+            $('#enableButton').hide();
+            $('#disableButton').hide();
+
             // On select deselect event.
             userTable.on('select deselect', function () {
-                // Disable buttons unless row is selected.
-                var selectedRows = userTable.rows({ selected: true }).count();
-                userTable.button(1).enable(selectedRows === 1);
+                var selectedRow = userTable.rows({ selected: true });
+                if (selectedRow.count() === 0) {
+                    $('#enableButton').hide();
+                    $('#disableButton').hide();
+                } else if (selectedRow.count() === 1 && selectedRow.data()[0].AspNetUsers.Active === 'True') {
+                    $('#enableButton').hide();
+                    $('#disableButton').show();
+                    userTable.button(1).enable();
+                } else {
+                    $('#enableButton').show();
+                    $('#disableButton').hide();
+                    userTable.button(1).disable();
+                }
             });
-
         });
     </script>
 }

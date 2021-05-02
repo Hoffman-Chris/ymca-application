@@ -8,6 +8,7 @@
     padding-left: 15px;
     padding-right: 15px;
 }
+/******************************************************/
 
 /* Override the default bootstrap behavior where horizontal description lists 
    will truncate terms that are too long to fit in the left column 
@@ -15,6 +16,7 @@
 .dl-horizontal dt {
     white-space: normal;
 }
+/***************************************************************************/
 
 /* Set width on the form input elements since they're 100% wide by default */
 input,
@@ -22,17 +24,20 @@ select,
 textarea {
     max-width: 280px;
 }
+/***************************************************************************/
 
 /* YMCA logo in navbar */
 #ymca-logo {
     height: 50px;
     width: 70px;
 }
+/***********************/
 
 /* DataTables Editor form height */
 div.DTED_Lightbox_Wrapper div.DTED_Lightbox_Container div.DTED_Lightbox_Content_Wrapper div.DTED_Lightbox_Content div.DTE div.DTE_Body_Content {
     max-height: 75vh !important;
 }
+/*********************************/
 
 /* DataTables Editor form weekday formatting */
 div.DTE div.DTE_Body_Content div.DTE_Form_Content div.DTE_Field.DTE_Field_Type_datetime.DTE_Field_Name_Program\.EndDate {
@@ -43,8 +48,20 @@ div.DTE div.DTE_Body_Content div.DTE_Form_Content div.DTE_Field.DTE_Field_Type_c
     padding-top: 0px;
     padding-bottom: 0px;
 }
+/*********************************************/
 
 /* viewParticipants Form  */
 participants-template {
     padding-left: 6px;
 }
+/**************************/
+
+/* Disabled users */
+.disabled-user {
+    color: darkgrey;
+}
+
+#Users tbody tr[class*='disabled-user'][class*='selected'] {
+    color: #737373;
+}
+/******************/

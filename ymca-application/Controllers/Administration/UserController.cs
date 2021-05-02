@@ -1,15 +1,18 @@
 ﻿using System.Configuration;
+using System.Data;
+using System.Data.SqlClient;
 using System.Web;
 using System.Web.Http;
+using System.Web.Mvc;
 using DataTables;
 
 namespace ymca_application.Controllers
 {
-    public class UserController : ApiController
+    public class APIUserController : ApiController
     {
-        [Route("api/GetUsers")]
-        [HttpGet]
-        [HttpPost]
+        [System.Web.Http.Route("api/GetUsers")]
+        [System.Web.Http.HttpGet]
+        [System.Web.Http.HttpPost]
         public IHttpActionResult GetUsers()
         {
             var request = HttpContext.Current.Request;
@@ -75,6 +78,31 @@ namespace ymca_application.Controllers
                     .Data();
 
                 return Json(response);
+            }
+        }
+    }
+
+    public class MVCUserController : Controller
+    {
+        public void DisableUser(string UserId)
+        {
+            using (SqlConnection connection = new SqlConnection { ConnectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString })
+            {
+                // Open connection to database.
+                connection.Open();
+
+                // Execute stored procedure to disable a user.
+                using (SqlCommand command = new SqlCommand("[Disable-User]", connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.Add("@UserId", SqlDbType.NVarChar).Value = UserId;
+
+                    command.Prepare();
+                    command.ExecuteNonQuery();
+                }
+
+                // Close connection.
+                connection.Close();
             }
         }
     }

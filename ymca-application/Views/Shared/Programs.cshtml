@@ -66,12 +66,23 @@
     <script type="text/javascript" charset="utf-8" src="~/Content/DataTables/Editor-1.9.6/js/dataTables.editor.min.js"></script>
 
     <script>
-        var programForm, initMaxParticipants, initCurrParticipants, currNumParticipants, defaultProgramTableLength = 25, defaultProgramTableSort = 3;
+        var programForm, programTable, initMaxParticipants, initCurrParticipants, currNumParticipants, defaultProgramTableLength = 25, defaultProgramTableSort = 3;
         var viewForm;
-        var participantForm, participantsTable, participantProgram, participantProgramName, defaultParticipantLength = 10, defaultParticipantSort = 0;
+        var participantForm, participantsTable, participantProgram, participantProgramName, defaultParticipantLength = 10, defaultParticipantSort = 0, defaultParticipantsSearchable = false;
         var weekDays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
         var roleLevel = '@User.Identity.GetRole()';
         $(document).ready(function () {
+            // Hide CRUD buttons from certain users
+            if (!(roleLevel >= 3)) {
+                $('#editButton').hide();
+            } else {
+                defaultParticipantsSearchable = true;
+            }
+
+            if (!(roleLevel >= 4)) {
+                $('#newButton').hide();
+                $('#deleteButton').hide();
+            }
 
             // Function to get min date for programs.
             function getMinDate() {
@@ -372,7 +383,7 @@
             });
 
             // Program Table
-            var programTable = $('#Programs').DataTable({
+            programTable = $('#Programs').DataTable({
                 autoWidth: false,
                 select: {
                     style: 'single'
@@ -386,6 +397,15 @@
                 ajax: {
                     url: '/api/GetPrograms'
                 },
+                // Column defaults
+                columnDefs: [
+                    // Hide the last column containing the program participants.
+                    {
+                        targets: 9,
+                        visible: false,
+                        searchable: defaultParticipantsSearchable
+                    }
+                ],
                 // Table columns
                 columns: [
                     { data: "Program.ProgramName" },
@@ -433,6 +453,18 @@
                             if (data.Instructor.InstructorFirstName === null || data.Instructor.InstructorLastName === null ) return "-";
                             return data.Instructor.InstructorFirstName + ' ' + data.Instructor.InstructorLastName;
                         }
+                    },
+                    {
+                        data: null, render: function (data, type, row) {
+                            if (data.Participants.length > 0) {
+                                var participants = "";
+                                for (var i = 0; i < data.Participants.length; i++) {
+                                    participants = participants.concat(" " + data.Participants[i].AspNetUsers.FirstName +  " " + data.Participants[i].AspNetUsers.LastName)
+                                }
+                                return participants;
+                            }
+                            return null;
+                        }
                     }
                 ],
                 // Control button layout
@@ -455,16 +487,6 @@
                     }
                 ]
             });
-
-            // Hide CRUD buttons from certain users
-            if (!(roleLevel >= 3)) {
-                $('#editButton').hide();
-            }
-
-            if (!(roleLevel >= 4)) {
-                $('#newButton').hide();
-                $('#deleteButton').hide();
-            }
 
             // On Program table row double click event.
             $('#Programs tbody').on('dblclick', 'tr', function (e) {
@@ -818,23 +840,23 @@
                         programForm.field('Program.MaxParticipants').error('Required');
                     } else if (!integerCheck(programForm.field('Program.MaxParticipants').val())) {
                         programForm.field('Program.MaxParticipants').error('Please enter a whole number.');
-                    } else if (programForm.field('Program.MaxParticipants').val() < 1) {
+                    } else if (parseInt(programForm.field('Program.MaxParticipants').val()) < 1) {
                         programForm.field('Program.MaxParticipants').error('Program must contain at least 1 participant.');
-                    } else if (programForm.field('Program.MaxParticipants').val() < programForm.field('Program.CurrentParticipants').val()) {
+                    } else if (parseInt(programForm.field('Program.MaxParticipants').val()) < parseInt(programForm.field('Program.CurrentParticipants').val())) {
                         programForm.field('Program.MaxParticipants').error('Program capacity must be greater than or equal to current number of participants.');
                     }
 
                     // Member Price
                     if (!programForm.field('Program.MemberPrice').val()) {
                         programForm.field('Program.MemberPrice').error('Required');
-                    } else if (programForm.field('Program.MemberPrice').val() <= 0) {
+                    } else if (parseFloat(programForm.field('Program.MemberPrice').val()) <= 0) {
                         programForm.field('Program.MemberPrice').error('Member price must be greater than 0.');
                     }
 
                     // Non-member Price
                     if (!programForm.field('Program.NonMemberPrice').val()) {
                         programForm.field('Program.NonMemberPrice').error('Required');
-                    } else if (programForm.field('Program.NonMemberPrice').val() <= 0) {
+                    } else if (parseFloat(programForm.field('Program.NonMemberPrice').val()) <= 0) {
                         programForm.field('Program.NonMemberPrice').error('Non-member price must be greater than 0.');
                     }
 
