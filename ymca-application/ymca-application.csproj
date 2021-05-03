@@ -250,6 +250,10 @@
     <Content Include="Content\DataTables\Editor-1.9.6\css\scss\mixins.scss" />
     <Content Include="Content\DataTables\Editor-1.9.6\css\scss\processing.scss" />
     <Content Include="Content\DataTables\Editor-1.9.6\css\scss\upload.scss" />
+    <Content Include="Content\Help\IT_Manager_Manual.pdf" />
+    <Content Include="Content\Help\Administrator_Manual.pdf" />
+    <Content Include="Content\Help\Staff_Manual.pdf" />
+    <Content Include="Content\Help\Users_Manual.pdf" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\editor.mask.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
@@ -273,7 +277,7 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\Home\About.cshtml" />
+    <Content Include="Views\Home\Help.cshtml" />
     <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Account\_ExternalLoginsListPartial.cshtml" />
