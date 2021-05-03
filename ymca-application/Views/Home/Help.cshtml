@@ -14,7 +14,7 @@
     {
         <a href="~/Content/Help/Administrator_Manual.pdf">User Manual</a>
     }
-    else if (User.Identity.GetRole() > 0)
+    else if (User.Identity.GetRole() > 1)
     {
         <a href="~/Content/Help/Staff_Manual.pdf">User Manual</a>
     }
