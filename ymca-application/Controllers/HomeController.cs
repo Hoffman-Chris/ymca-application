@@ -9,9 +9,9 @@ namespace ymca_application.Controllers
             return View();
         }
 
-        public ActionResult Help()
+        public ActionResult About()
         {
-            ViewBag.Message = "Help Page";
+            ViewBag.Message = "About page.";
 
             return View();
         }

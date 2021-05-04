@@ -1,4 +1,5 @@
-﻿
+﻿@using ymca_application.Extensions
+
 @{
     ViewBag.Title = "Administration";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -8,16 +9,37 @@
 
 <hr />
 
-<div class="row">
-    <div class="col-md-4">
-        <h4>Manage Users</h4>
-        <p>Manage user's account and personal information such as email or access level.</p>
-        <p><a class="btn btn-default" href='@Url.Action("Users", "Administration")'>Click here &raquo;</a></p>
-    </div>
-    <div class="col-md-4">
+<div class="row" style="display:flex">
+    <div class="col-md-4" style="display: flex; flex-direction: column;">
         <h4>Manage Programs</h4>
-        <p>Manage available programs.</p>
+        <p>Manage available programs — add, remove, update programs and view all program participants depending on role level.</p>
         <br />
-        <p><a class="btn btn-default" href='@Url.Action("Programs", "Administration")'>Click here &raquo;</a></p>
+        <p style="margin-top: auto;"><a class="btn btn-default" href='@Url.Action("Programs", "Administration")'>Click here &raquo;</a></p>
+    </div>
+    @{ if (User.Identity.GetRole() >= 4)
+        {
+            <div class="col-md-4" style="display: flex; flex-direction: column;">
+                <h4>Manage Users</h4>
+                <p>Manage user accounts — add, disable, update user accounts and view personal information such as email or access level.</p>
+                <p style="margin-top: auto;"><a class="btn btn-default" href='@Url.Action("Users", "Administration")'>Click here &raquo;</a></p>
+            </div>
+        }
+    }
+    <div class="col-md-4" style="display: flex; flex-direction: column;">
+        <h4>Documentation</h4>
+        <p>View website functionality documentation.</p>
+        @{ if (User.Identity.GetRole() == 5)
+            {
+                <p style="margin-top: auto;"><a class="btn btn-default" href='@Url.Content("~/Content/Documentation/IT_Manager_Manual.pdf")'>Click here &raquo;</a></p>
+            }
+            else if (User.Identity.GetRole() == 4)
+            {
+                <p style="margin-top: auto;"><a class="btn btn-default" href='@Url.Content("~/Content/Documentation/Administrator_Manual.pdf")'>Click here &raquo;</a></p>
+            }
+            else
+            {
+                <p style="margin-top: auto;"><a class="btn btn-default" href='@Url.Content("~/Content/Documentation/Staff_Manual.pdf")'>Click here &raquo;</a></p>
+            }
+        }
     </div>
 </div>

@@ -65,3 +65,29 @@ participants-template {
     color: #737373;
 }
 /******************/
+
+/* Custom button colors -- LVHFA */
+.btn-primary, .btn-default {
+    background-color: #009786;
+    border-color: #111;
+    color: white;
+}
+
+.btn-primary:focus, .btn-default:focus {
+    background-color: #02675b;
+    border-color: #111;
+    color: white;
+}
+
+.btn-primary:hover, .btn-default:hover {
+    background-color: #02675b;
+    border-color: #111;
+    color: white;
+}
+
+.btn-primary:active:focus, .btn-default:active:focus {
+    background-color: #02675b;
+    border-color: #111;
+    color: white;
+}
+/*********************************/
