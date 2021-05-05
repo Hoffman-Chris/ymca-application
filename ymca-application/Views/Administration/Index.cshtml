@@ -9,13 +9,16 @@
 
 <hr />
 
+@*Administration tasks*@
 <div class="row" style="display:flex">
+    @*Manage programs*@
     <div class="col-md-4" style="display: flex; flex-direction: column;">
         <h4>Manage Programs</h4>
         <p>Manage available programs — add, remove, update programs and view all program participants depending on role level.</p>
         <br />
         <p style="margin-top: auto;"><a class="btn btn-default" href='@Url.Action("Programs", "Administration")'>Click here &raquo;</a></p>
     </div>
+    @*If user has a manager role or above, display manage users*@
     @{ if (User.Identity.GetRole() >= 4)
         {
             <div class="col-md-4" style="display: flex; flex-direction: column;">
@@ -25,6 +28,7 @@
             </div>
         }
     }
+    @*Display documentation staff according to user role level*@
     <div class="col-md-4" style="display: flex; flex-direction: column;">
         <h4>Documentation</h4>
         <p>View website functionality documentation.</p>

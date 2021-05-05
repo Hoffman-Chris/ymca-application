@@ -19,6 +19,7 @@ namespace ymca_application.Controllers
 
             using (var db1 = new Database("sqlserver", ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString))
             {
+                // Create a Datatables Editor object to gather users from database.
                 var response = new Editor(db1, "AspNetUsers", "Id")
                     .Field(new Field("AspNetUsers.Id")
                     )
@@ -77,6 +78,7 @@ namespace ymca_application.Controllers
                     .Process(request)
                     .Data();
 
+                // Return DataTables Editor user object.
                 return Json(response);
             }
         }

@@ -16,6 +16,7 @@ namespace ymca_application.Controllers
 
             using (var db1 = new Database("sqlserver", ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString))
             {
+                // Create a Datatables Editor object to gather programs from database.
                 var response = new Editor(db1, "Program", "ProgramId")
                     .Field(new Field("Program.ProgramId")
                     )
@@ -94,6 +95,7 @@ namespace ymca_application.Controllers
                     .Process(request)
                     .Data();
 
+                // Return DataTables Editor program object.
                 return Json(response);
             }
         }

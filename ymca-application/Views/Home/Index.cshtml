@@ -6,6 +6,7 @@
 
 <br />
 
+@*Moving carousel banner*@
 <div class="container">
     <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
         <!-- Indicators -->
@@ -54,7 +55,9 @@
 
 <br />
 
+@*Navigational buttons*@
 <div class="row">
+    @*Register*@
     <div class="col-md-4">
         <a href='@Url.Action("Register", "Account")'><img class="center-block" src="~/Images/Footer/stretching.png" width="200" height="200"></a>
         <h2>Join the YMCA Family Today</h2>
@@ -63,6 +66,7 @@
         </p>
         <p><a class="btn btn-default" href='@Url.Action("Register", "Account")'>Register &raquo;</a></p>
     </div>
+    @*Programs*@
     <div class="col-md-4">
         <a href='@Url.Action("Programs", "Home")'><img class="center-block" src="~/Images/Footer/running.png" width="200" height="200"></a>
         <h2>Check Out Our Available Programs</h2>
@@ -70,6 +74,7 @@
         <br />
         <p><a class="btn btn-default" href='@Url.Action("Programs", "Home")'>Programs &raquo;</a></p>
     </div>
+    @*About*@
     <div class="col-md-4">
         <a href='@Url.Action("About", "Home")'><img class="center-block" src="~/Images/Footer/jump-rope.png" width="200" height="200"></a>
         <h2>Upgrade To a Member Account Today</h2>

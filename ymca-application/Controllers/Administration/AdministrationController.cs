@@ -4,7 +4,7 @@ namespace ymca_application.Controllers
 {
     public class AdministrationController : Controller
     {
-        // GET: Administration
+        // GET: /Administration/Index
         public ActionResult Index()
         {
             return View();

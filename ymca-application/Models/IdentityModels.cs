@@ -9,6 +9,7 @@ namespace ymca_application.Models
     // You can add profile data for the user by adding more properties to your ApplicationUser class, please visit https://go.microsoft.com/fwlink/?LinkID=317594 to learn more.
     public class ApplicationUser : IdentityUser
     {
+        // Custom AspNet Identity attributes.
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string PhoneNumber { get; set; }
@@ -26,7 +27,7 @@ namespace ymca_application.Models
             // Note the authenticationType must match the one defined in CookieAuthenticationOptions.AuthenticationType
             var userIdentity = await manager.CreateIdentityAsync(this, DefaultAuthenticationTypes.ApplicationCookie);
 
-            // Add custom user claims here
+            // Add custom user claims here.
             userIdentity.AddClaim(new Claim("FirstName", this.FirstName));
             userIdentity.AddClaim(new Claim("Role", this.Role.ToString(), ClaimValueTypes.Integer32));
             userIdentity.AddClaim(new Claim("UserId", this.Id));

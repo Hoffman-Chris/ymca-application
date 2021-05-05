@@ -7,6 +7,7 @@ namespace ymca_application.Extensions
 {
     public static class IdentityExtensions
     {
+        // Get first name from AspNet Identity object.
         public static string GetFirstName(this IIdentity identity)
         {
             var claim = ((ClaimsIdentity)identity).FindFirst("FirstName");
@@ -20,6 +21,7 @@ namespace ymca_application.Extensions
             return string.Empty;
         }
 
+        // Get role from AspNet Identity object.
         public static int GetRole(this IIdentity identity)
         {
             var claim = ((ClaimsIdentity)identity).FindFirst("Role");
@@ -33,6 +35,7 @@ namespace ymca_application.Extensions
             return 0;
         }
 
+        // Get user id from AspNet Identity object.
         public static string GetUserId(this IIdentity identity)
         {
             var claim = ((ClaimsIdentity)identity).FindFirst("UserId");

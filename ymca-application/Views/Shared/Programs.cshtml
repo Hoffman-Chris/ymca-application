@@ -26,6 +26,7 @@
             <h1>Programs</h1>
         }
         <br />
+        @*Hidden ProgramParticipants DataTables table*@
         <div id="participants-template">
             <table id="participants-table" class="display text-nowrap compact" style="width:100%">
                 <thead>
@@ -37,6 +38,7 @@
                 </thead>
             </table>
         </div>
+        @*Programs DataTables table*@
         <table id="Programs" class="display text-nowrap compact" style="width:100%">
             <thead>
                 <tr>
@@ -700,7 +702,7 @@
                                                 text: 'Delete', action: function () {
                                                     // AJAX request to delete product.
                                                     $.ajax({
-                                                        url: '@Url.Action("DeleteProgramParticipant", "DeleteProgramParticipant")',
+                                                        url: '@Url.Action("DeleteProgramParticipant", "MVCProgramParticipant")',
                                                         type: 'POST',
                                                         data: {
                                                             program: programId,

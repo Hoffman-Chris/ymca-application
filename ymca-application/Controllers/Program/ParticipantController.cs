@@ -8,7 +8,7 @@ using DataTables;
 
 namespace ymca_application.Controllers
 {
-    public class ProgramParticipantController : ApiController
+    public class APIProgramParticipantController : ApiController
     {
         [System.Web.Http.Route("api/GetProgramParticipants")]
         [System.Web.Http.HttpGet]
@@ -19,6 +19,7 @@ namespace ymca_application.Controllers
 
             using (var db1 = new Database("sqlserver", ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString))
             {
+                // Create a Datatables Editor object to gather program participants from database.
                 var response = new Editor(db1, "ProgramParticipants", new string[] { "ProgramId", "UserId" })
                     .Field(new Field("ProgramParticipants.ProgramId")
                     )
@@ -36,12 +37,13 @@ namespace ymca_application.Controllers
                     .Process(request)
                     .Data();
 
+                // Return DataTables Editor program participants object.
                 return Json(response);
             }
         }
     }
 
-    public class DeleteProgramParticipantController : Controller
+    public class MVCProgramParticipantController : Controller
     {
         public void DeleteProgramParticipant(int program, string user)
         {
